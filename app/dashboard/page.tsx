@@ -8,6 +8,7 @@ import RevenueChart from '@/app/ui/dashboard/revenue-chart';
 import { lusitana } from '@/app/ui/fonts';
 import { Card } from '../ui/dashboard/cards';
 import LatestInvoices from '../ui/dashboard/latest-invoices';
+export const dynamic = 'force-dynamic';
 
 export default async function Page() {
 	const revenue = await fetchRevenue();
