@@ -10,6 +10,7 @@ import {
 	UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { useFormState } from 'react-dom';
 
 export default function EditInvoiceForm({
 	invoice,
@@ -18,8 +19,12 @@ export default function EditInvoiceForm({
 	invoice: InvoiceForm;
 	customers: CustomerField[];
 }) {
+	const initialState = { message: null, errors: {} };
+
+	const [state, dispatch] = useFormState(updateInvoice, initialState);
+
 	return (
-		<form action={updateInvoice}>
+		<form action={dispatch}>
 			<input type='hidden' name='id' value={invoice.id} />
 
 			<div className='rounded-md bg-gray-50 p-4 md:p-6'>
@@ -36,6 +41,7 @@ export default function EditInvoiceForm({
 							name='customerId'
 							className='peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500'
 							defaultValue={invoice.customer_id}
+							aria-describedby='customer-error'
 						>
 							<option value='' disabled>
 								Select a customer
@@ -48,6 +54,17 @@ export default function EditInvoiceForm({
 						</select>
 						<UserCircleIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500' />
 					</div>
+					{state.errors?.customerId ? (
+						<div
+							id='customer-error'
+							aria-live='polite'
+							className='mt-2 text-sm text-red-500'
+						>
+							{state.errors.customerId.map((error: string) => (
+								<p key={error}>{error}</p>
+							))}
+						</div>
+					) : null}
 				</div>
 
 				{/* Invoice Amount */}
@@ -68,6 +85,17 @@ export default function EditInvoiceForm({
 							<CurrencyDollarIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900' />
 						</div>
 					</div>
+					{state.errors?.amount ? (
+						<div
+							id='customer-error'
+							aria-live='polite'
+							className='mt-2 text-sm text-red-500'
+						>
+							{state.errors.amount.map((error: string) => (
+								<p key={error}>{error}</p>
+							))}
+						</div>
+					) : null}
 				</div>
 
 				{/* Invoice Status */}
@@ -111,6 +139,17 @@ export default function EditInvoiceForm({
 							</div>
 						</div>
 					</div>
+					{state.errors?.status ? (
+						<div
+							id='customer-error'
+							aria-live='polite'
+							className='mt-2 text-sm text-red-500'
+						>
+							{state.errors.status.map((error: string) => (
+								<p key={error}>{error}</p>
+							))}
+						</div>
+					) : null}
 				</div>
 			</div>
 			<div className='mt-6 flex justify-end gap-4'>
