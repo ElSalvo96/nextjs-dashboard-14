@@ -1,6 +1,5 @@
 'use server';
 
-import { signIn } from '@/auth';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -114,27 +113,4 @@ export async function deleteInvoice(formData: FormData) {
 	// } catch (error) {
 	// 	return { message: 'Database Error: Failed to Delete Invoice.' };
 	// }
-}
-
-// Check here https://github.com/vercel/next-learn/issues/252
-export async function authenticate(
-	prevState: string | undefined,
-	formData: FormData
-) {
-	let responseRedirectUrl = null;
-	try {
-		console.log('formData', formData);
-		responseRedirectUrl = await signIn('credentials', {
-			...Object.fromEntries(formData),
-			redirect: false,
-		});
-	} catch (error) {
-		console.log('error', error);
-		if ((error as Error).message.includes('CredentialsSignin')) {
-			return 'CredentialSignin';
-		}
-		throw error;
-	} finally {
-		if (responseRedirectUrl) redirect(responseRedirectUrl);
-	}
 }
